@@ -11,11 +11,14 @@ const Alerts = ({ alert }) => {
     if (msg && msg.name) alert.error(`Name: ${msg.name.join()}`);
     if (msg && msg.email) alert.error(`Email: ${msg.email.join()}`);
     if (msg && msg.non_field_errors) alert.error(msg.non_field_errors);
+    if (msg && msg.username) alert.error(msg.username.join());
 
     // message alert
     if (message && message.deleteLead) alert.success(message.deleteLead);
     if (message && message.addLead) alert.success(message.addLead);
-  }, [msg]);
+    if (message && message.passwordNotMatch)
+      alert.error(message.passwordNotMatch);
+  }, [msg, message]);
 
   return <Fragment />;
 };

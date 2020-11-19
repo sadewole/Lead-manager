@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { register } from '../../store/actions/auth';
+import { createMessage } from '../../store/actions/messages';
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
   const [value, setValue] = useState({
     username: '',
     email: '',
@@ -11,8 +16,20 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    const { password2, ...rest } = value;
+    if (value.password !== password2) {
+      dispatch(createMessage({ passwordNotMatch: 'Passwords do not match ' }));
+
+      return;
+    }
+
+    dispatch(register(rest));
   };
 
+  if (auth.isAuthenticated) {
+    return <Redirect to='/' />;
+  }
   return (
     <div className='col-md-6 m-auto'>
       <div className='card card-body my-5'>
